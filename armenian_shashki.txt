@@ -1,0 +1,206 @@
+root =
+{
+	board_height = 8,
+	board_width = 8,
+	sample = [
+				[EMPTY,     0,     0, EMPTY, EMPTY,     2,     2, EMPTY]
+				[EMPTY,     0,     0, EMPTY, EMPTY,     2,     2, EMPTY]
+				[EMPTY,     0,     0, EMPTY, EMPTY,     2,     2, EMPTY]
+				[EMPTY,     0,     0, EMPTY, EMPTY,     2,     2, EMPTY]
+				[EMPTY,     0,     0, EMPTY, EMPTY,     2,     2, EMPTY]
+				[EMPTY,     0,     0, EMPTY, EMPTY,     2,     2, EMPTY]
+				[EMPTY,     0,     0, EMPTY, EMPTY,     2,     2, EMPTY]
+				[EMPTY,     0,     0, EMPTY, EMPTY,     2,     2, EMPTY]
+	],
+	pieces = 4,
+	piece_owners = [0, 0, 1, 1],
+	piece_icon = ['o', '@', '*', '$'],
+	moves = [
+		{type = 'm', dx = "0", dy = "1", priority = 0, repeatable = 0,
+		 conditions = [
+		 	[CON_PLAYER, CON_END, '=', CON_EMPTY, 0]
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		 	[ACT_REPLACE, ACT_NEXT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'm', dx = "0", dy = "1-", priority = 0, repeatable = 0,
+		 conditions = [
+		 	[CON_PLAYER, CON_END, '=', CON_EMPTY, 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		 	[ACT_REPLACE, ACT_NEXT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'm', dx = "i1", dy = "0", priority = 0, repeatable = 0,
+		 conditions = [
+		 	[CON_PLAYER, CON_END, '=', CON_EMPTY, 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		 	[ACT_REPLACE, ACT_NEXT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'j', dx = "i1", dy = "0", priority = 1, repeatable = 1,
+		 conditions = [
+		 	[CON_PLAYER, CON_END, '@', CON_EMPTY, 0],
+			[CON_PLAYER, CON_TARGET, '=', CON_ENEMY, 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		 	[ACT_ABORT, 0],
+			[ACT_REPLACE_OBS, CON_BYTE, TEMP, ACT_REPLACE, ACT_REPEAT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'j', dx = "0", dy = "1", priority = 1, repeatable = 1,
+		 conditions = [
+		 	[CON_PLAYER, CON_END, '@', CON_EMPTY, 0],
+			[CON_PLAYER, CON_TARGET, '=', CON_ENEMY, 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		 	[ACT_ABORT, 0],
+		 	[ACT_REPLACE_OBS, CON_BYTE, TEMP, ACT_REPLACE, ACT_REPEAT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'j', dx = "0", dy = "1-", priority = 1, repeatable = 1,
+		 conditions = [
+		 	[CON_PLAYER, CON_END, '@', CON_EMPTY, 0],
+			[CON_PLAYER, CON_TARGET, '=', CON_ENEMY, 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		 	[ACT_ABORT, 0]
+		 	[ACT_REPLACE_OBS, CON_BYTE, TEMP, ACT_REPLACE, ACT_REPEAT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'm', dx = "ia", dy = "0", priority = 0, repeatable = 0,
+		 conditions = [
+		  	[CON_PLAYER, CON_END, '@', CON_EMPTY, 0],
+			[CON_OBS, CON_ANY, '=', CON_NUM, '0', 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		  	[ACT_ABORT, 0],
+			[ACT_REPLACE, ACT_NEXT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'm', dx = "ia", dy = "0", priority = 1, repeatable = 1,
+		  conditions = [
+		  	[CON_PLAYER, CON_END, '@', CON_EMPTY, 0],
+			[CON_OBS, CON_ANY, '@', CON_NUM, '1', 0],
+			[CON_OBS, CON_ENEMY, '=', CON_NUM, '1', 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		  	[ACT_ABORT, 0],
+			[ACT_ABORT, 0],
+			[ACT_REPLACE_OBS, CON_BYTE, TEMP, ACT_REPLACE, ACT_REPEAT, 0],
+			[ACT_ABORT, 0]
+		 ], 
+		}
+		{type = 'm', dx = "0", dy = "ia", priority = 0, repeatable = 0,
+		 conditions = [
+		  	[CON_PLAYER, CON_END, '@', CON_EMPTY, 0],
+			[CON_OBS, CON_ANY, '=', CON_NUM, '0', 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		  	[ACT_ABORT, 0],
+			[ACT_REPLACE, ACT_NEXT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'm', dx = "0", dy = "ia", priority = 1, repeatable = 1,
+		  conditions = [
+		  	[CON_PLAYER, CON_END, '@', CON_EMPTY, 0],
+			[CON_OBS, CON_ANY, '@', CON_NUM, '1', 0],
+			[CON_OBS, CON_ENEMY, '=', CON_NUM, '1', 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		  	[ACT_ABORT, 0],
+			[ACT_ABORT, 0],
+			[ACT_REPLACE_OBS, CON_BYTE, TEMP, ACT_REPLACE, ACT_REPEAT, 0],
+			[ACT_ABORT, 0]
+		 ], 
+		}
+	],
+	pieces_moves = [
+		[4, 3, 2, 0, EMPTY],
+		[9, 7, 8, 6, EMPTY],
+		[5, 3, 2, 1, EMPTY],
+		[9, 7, 8, 6, EMPTY]
+	],
+	game_over_conditions = [
+		[CON_COUNT, CON_PLAYER, '1', '=', '0', 0],
+		[CON_COUNT, CON_PLAYER, '0', '=', '0', 0],
+		[CON_NO_MOVES, CON_PLAYER, '1', 0],
+		[CON_NO_MOVES, CON_PLAYER, '0', 0],
+		[0]
+	],
+	game_over_winner = [0, 1, 0, 1]
+	events = 
+	[
+		{
+	 		con = [CON_DEFAULT, 0],
+	 		act = [ACT_CONVERT, CON_LINE, CON_NUM, '7', CON_PIECE, CON_NUM, 
+					'0', CON_PIECE, CON_NUM, '1', 0]
+		},
+		{
+	 		con = [CON_DEFAULT, 0]
+	 		act = [ACT_CONVERT, CON_LINE, CON_NUM, '0', CON_PIECE, CON_NUM,
+					'2',CON_PIECE, CON_NUM, '3', 0]
+		},
+		{
+			con = [CON_CUR_PLAYER, '@', CON_LAST_PLAYER, 0],
+			act = [ACT_REMOVE, CON_PIECE, CON_BYTE, TEMP, 0]
+		}
+	];
+	event_count = 3;
+	ai_eval_board = 
+	[
+		[0, 0, 1, 1, 3, 4, 5,  7],
+		[0, 1, 1, 3, 4, 4, 6,  7],
+		[0, 1, 1, 3, 4, 5, 6,  7],
+		[0, 1, 1, 3, 5, 6, 6,  7],
+		[0, 1, 1, 3, 5, 6, 6,  7],
+		[0, 1, 1, 3, 4, 5, 6,  7],
+		[0, 1, 1, 3, 4, 4, 6,  7],
+		[0, 0, 1, 1, 3, 4, 5,  7],
+	];
+	ai_eval_piece_weight = [50, 250, -50, -250];
+	player_count = [12, 12];
+	piece_count = [12, 0, 12, 0];
+	moves_count = 10;
+	max_avail_moves = 200;
+	ai_bots = [3, 4, 5];
+	longest_move = 1;
+	description =
+"Armenian draughts is a variant of draughts (or checkers) played in Armenia. Its rules are quite similar to Turkish draughts.
+
+Players take turns with each making one move per turn. Pieces consist of men and kings. There are no kings in the setup position.
+
+On an 8x8 board, 16 men are lined up on each side in two rows, skipping the first and last row. So, from a player's point of view, the second and third row are filled with his own men, and the sixth and seventh row are filled with the opponent's men.
+
+A man can move forwards or sideways to an orthogonally adjacent field, if that field is empty. If there is an opposing piece on that field and the field behind the piece (in direction of the movement) is empty, the opposing piece can be captured by a jump, with the capturing piece going to said empty field. There is no backward movement or capture for men.
+
+Upon ending a move on the last row, a man is promoted to king. Note that the extra movement and capture rights of a king do not yet apply to the man promoted in this move.
+
+Kings may move any number of fields orthogonally forwards, sideways, or backwards, capturing by jumping over a piece and landing in any field of an unbroken row or line of empty fields behind the piece captured.
+
+Multiple captures are allowed, even required where possible, for men and kings alike. If there are different ways of capture, the one which takes the most pieces (no difference between kings and men is made) is mandatory. If there are several ways of maximum capture possible, the player may choose.
+
+Winner is the player whose opponent cannot move anymore."
+
+}
+

@@ -1,0 +1,196 @@
+This part is taken from parser.h
+
+	How does it work:
+
+	Parser can read four types of data:
+
+	* INT - a single integer or an array of integers
+	* CHAR - the same but with chars
+	* STRUCT - structure that has children data of differen types
+	* ARRAY_STRUCT - obsolete
+
+	Variables are declared like these
+
+	var_name = value
+
+	var_name must begin with a..z and can contain a..z, A..Z, 0..9 and _
+
+	A sequence of 0..9 and - is treated as a single integer
+
+	'@' - a single character. Can contain any character except '.
+
+	"string^^" - a string. Can contain any charcters except ".
+
+	some_Macr0s - a macros. By default its value is treated as a character,
+	though it can be used in int arrays
+
+	{...} - a structure. Can contain another variables. Vars
+	can be of different types. All of them must be
+	declared as a usual var.
+	Example:
+	root = {
+		seven = 7 string = "string" char = 'c' mac = EMPTY
+	}
+
+	[...] - an array. Can contain another variables but those must not have
+	names and they are only declared by their values.
+		* The difference between structure and arrays is that vars
+		in arrays must not have any names and should be of the 
+		same type. 
+		* Type of an array is defined by the first element found in array.
+		* Character array may contain single characters, macroses and
+		positive integers, whose value is treated as ASCII code.
+		* Int array can have ints and macroses.
+		* Struct arrays can have structs and another arrays. For parser
+		there is no real difference between them.
+	
+	parser_get takes the first var from the file, everything else
+	is ignored. So a file should have root structure.
+
+	List of permitted chars: a..z A..Z 0..9 _ = { } [ ] - " '
+	Everything else is treated as delimeters.
+
+
+
+
+More about rules structure:
+
+board_height, board_width - measurements of the board
+pieces - ammount of different pieces. Their ids are numbered 
+with 0 .. pieces - 1
+
+sample - a starting position on the board. It must contain
+array of arrays of pieces ids, EMPTY macro for empty places, WALL macro
+for walls. Note that x axis is pointed down, and y axis is pointed right.
+
+piece_owners - an array of owners for each piece
+
+piece_icon - icons
+
+moves_count - ammount of different moves
+
+max_avail_moves - a number of possible variants of moves that can 
+be present at a time. Needed for program to allocate memory for possible
+moves arrays. Take bigger to be sure the prog won't fail.
+
+longest_move - a flag that says if the player should take the longest move
+possible.
+
+moves - array of moves descriptions.
+Each description is a struct.
+	type - 	'm' - move from one place to another
+			'j' - jump over a target place
+
+	dx,dy - an offset of the move. Can store:
+		'i' - means "plus/minus"
+		'-' - means minus (has to be stored at the end of the string)
+		'a' - means "any" - a move can be done in any distance
+		0..9 - an offset value
+
+	priority - moves of te lower priority can't be done if there are
+	moves with higher priority.
+
+	repeatable - means that a move should be repeated
+
+	conditions - array of conditions, defined by arrays of macros
+	(more info below)
+
+	actions - array of actions
+
+
+pieces_moves - array of moves that can be done by each piece.
+!Must be terminated with EMPTY macro!
+	
+events - array of strusts, containing conditions and actions.
+If a condition is satisfied, an action is taken. Events are run
+after the end of each move. Note that a turn of a player can contain
+more than one move.
+
+event_count - ammount of events
+
+ai_eval_board - a weight of the positions on the board for each square 
+for ai. Must be represented for white player, for black it would be 
+mirrored. Orientation is the same as for sample. Positive values good for 
+white player, negative - for black.
+
+ai_eval_piece_weight - a weight for each piece for ai.
+
+ai_bots - number of depths for easy/medium/hard bots. Note
+that this is the minimal value of depth, when searching through moves
+with higher priority the depth is increased.
+
+
+
+Conditions structure:
+
+Conditonal statement must be represented like this:
+
+	value operator value 0
+
+There are only two operators: '=' and '@'(not equal)
+! THERE IS NO CHECKING FOR STATEMENT LEGACY, THE PROGRAM WILL FINISH
+WITH SIEGFAULT IF ANY ERROR OCCURS !
+
+List of macros
+CON_END - gets the finishing coordinates of the move
+CON_START - gets the beginning coords of the move
+CON_DEFAULT - returns true always
+CON_EMPTY - returns an empty player descriptor
+CON_ALLY - returns the owner of the moving piece
+
+CON_OBS - returns ammount of obstacles between start and end
+belonging to defined player
+	Usage: CON_OBS player
+		   CON_OBS CON_ANY - returns ammount of all obstacles
+		   (including walls)
+
+CON_COUNT - returns:
+	CON_COUNT player - ammount of pieces belonging to player
+	CON_COUNT piece - ammount of pieces on the board
+
+CON_PLAYER - returns:
+	CON_PLAYER coords - owner of the piece at given coords
+	CON_PLAYER number - a plyer with given number (0 - white, 1 - black, 
+						2 - walls, EMPTY - empty square)
+
+CON_PIECE - returns
+	CON_PIECE coords - returns the piece standing at the given coords
+	CON_PIECE number - the piece with given id
+
+CON_COORD - returns given coordinates
+	Usage: CON_COORD number_x number_y
+	
+CON_BOOL - returns boolen var
+ Usage: CON_BOOL number
+
+CON_NUM - converts following digits to a number var
+	Usage: CON_NUM digit1 digit2 ...
+	digits : '0'..'9'
+
+CON_TARGET - !for jumps only!
+	returns the square coordinates the piece jumps over
+
+CON_ANY - some funcs use it
+CON_LINE - returns the board line descriptor
+	Usage: CON_LINE number
+
+CON_LAST_PLAYER - last player that made a move
+CON_CUR_PLAYER - current player
+CON_BYTE - returns next byte as a number
+
+Actions structure
+
+	action1 action2 ... 0
+
+
+ACT_REPLACE - replaces the square at the end with the piece at the 
+beginning and make beginning square empty
+ACT_ABORT - tells that no actions must be taken
+ACT_REPLACE_OBS - turns obstacles in given piece
+	Usage: ACT_REPLACE_OBS piece
+ACT_REPEAT - tells that a piece must repeat the move if it can
+ACT_NEXT - tells that a next player should take his turn
+ACT_CONVERT - converts pieces1 to pieces2 at given location
+	Usage: ACT_CONVERT location piece1 piece2
+ACT_REMOVE - removes all pieces on the board of the given type
+	Usage: ACT_REMOVE piece

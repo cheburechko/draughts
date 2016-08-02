@@ -1,0 +1,163 @@
+root =
+{
+	board_height = 10,
+	board_width = 10,
+	sample = [
+				[    0, EMPTY,     0, EMPTY, EMPTY, EMPTY,     2, EMPTY,     2, EMPTY],
+				[EMPTY,     0, EMPTY,     0, EMPTY, EMPTY, EMPTY,     2, EMPTY,     2],
+				[    0, EMPTY,     0, EMPTY, EMPTY, EMPTY,     2, EMPTY,     2, EMPTY],
+				[EMPTY,     0, EMPTY,     0, EMPTY, EMPTY, EMPTY,     2, EMPTY,     2],
+				[    0, EMPTY,     0, EMPTY, EMPTY, EMPTY,     2, EMPTY,     2, EMPTY],
+				[EMPTY,     0, EMPTY,     0, EMPTY, EMPTY, EMPTY,     2, EMPTY,     2],
+				[    0, EMPTY,     0, EMPTY, EMPTY, EMPTY,     2, EMPTY,     2, EMPTY],
+				[EMPTY,     0, EMPTY,     0, EMPTY, EMPTY, EMPTY,     2, EMPTY,     2],
+				[    0, EMPTY,     0, EMPTY, EMPTY, EMPTY,     2, EMPTY,     2, EMPTY],
+				[EMPTY,     0, EMPTY,     0, EMPTY, EMPTY, EMPTY,     2, EMPTY,     2]
+	],
+	pieces = 4,
+	piece_owners = [0, 0, 1, 1],
+	piece_icon = ['o', '@', '*', '$'],
+	moves = [
+		{type = 'm', dx = "i1", dy = "1", priority = 0, repeatable = 0,
+		 conditions = [
+		 	[CON_PLAYER, CON_END, '=', CON_EMPTY, 0]
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		 	[ACT_REPLACE, ACT_NEXT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'm', dx = "i1", dy = "1-", priority = 0, repeatable = 0,
+		 conditions = [
+		 	[CON_PLAYER, CON_END, '=', CON_EMPTY, 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		 	[ACT_REPLACE, ACT_NEXT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'j', dx = "i1", dy = "i1", priority = 1, repeatable = 1,
+		 conditions = [
+		 	[CON_PLAYER, CON_END, '@', CON_EMPTY, 0],
+			[CON_PLAYER, CON_TARGET, '=', CON_ENEMY, 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		 	[ACT_ABORT, 0],
+			[ACT_REPLACE_OBS, CON_BYTE, TEMP, ACT_REPLACE, ACT_REPEAT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'm', dx = "ia", dy = "ia", priority = 0, repeatable = 0,
+		 conditions = [
+		  	[CON_PLAYER, CON_END, '@', CON_EMPTY, 0],
+			[CON_OBS, CON_ANY, '=', CON_NUM, '0', 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		  	[ACT_ABORT, 0],
+			[ACT_REPLACE, ACT_NEXT, 0],
+			[ACT_ABORT, 0]
+		 ]
+		},
+		{type = 'm', dx = "ia", dy = "ia", priority = 1, repeatable = 1,
+		  conditions = [
+		  	[CON_PLAYER, CON_END, '@', CON_EMPTY, 0],
+			[CON_OBS, CON_ANY, '@', CON_NUM, '1', 0],
+			[CON_OBS, CON_ENEMY, '=', CON_NUM, '1', 0],
+			[CON_DEFAULT, 0]
+		 ],
+		 actions = [
+		  	[ACT_ABORT, 0],
+			[ACT_ABORT, 0],
+			[ACT_REPLACE_OBS, CON_BYTE, TEMP, ACT_REPLACE, ACT_REPEAT, 0],
+			[ACT_ABORT, 0]
+		 ], 
+		}
+	],
+	pieces_moves = [
+		[2, 0, EMPTY],
+		[4, 3, EMPTY],
+		[2, 1, EMPTY],
+		[4, 3, EMPTY]
+	],
+	game_over_conditions = [
+		[CON_COUNT, CON_PLAYER, '1', '=', '0', 0],
+		[CON_COUNT, CON_PLAYER, '0', '=', '0', 0],
+		[CON_NO_MOVES, CON_PLAYER, '1', 0],
+		[CON_NO_MOVES, CON_PLAYER, '0', 0],
+		[0]
+	],
+	game_over_winner = [0, 1, 0, 1]
+	events = 
+	[
+		{
+	 		con = [CON_CUR_PLAYER, '@', CON_LAST_PLAYER, 0],
+	 		act = [ACT_CONVERT, CON_LINE, CON_NUM, '9', CON_PIECE, CON_NUM, 
+					'0', CON_PIECE, CON_NUM, '1', 0]
+		},
+		{
+	 		con = [CON_CUR_PLAYER, '@', CON_LAST_PLAYER, 0],
+	 		act = [ACT_CONVERT, CON_LINE, CON_NUM, '0', CON_PIECE, CON_NUM,
+					'2',CON_PIECE, CON_NUM, '3', 0]
+		},
+		{
+			con = [CON_CUR_PLAYER, '@', CON_LAST_PLAYER, 0],
+			act = [ACT_REMOVE, CON_PIECE, CON_BYTE, TEMP, 0]
+		}
+	];
+	event_count = 3;
+	ai_eval_board = 
+	[
+		[1, 0, 2, 0, 4, 0, 8,  0, 10,  0],
+		[0, 2, 0, 4, 0, 8, 0, 10,  0, 12],
+		[1, 0, 3, 0, 6, 0, 9,  0, 11,  0],
+		[0, 2, 0, 4, 0, 8, 0, 10,  0, 12],
+		[1, 0, 3, 0, 6, 0, 9,  0, 11,  0],
+		[0, 2, 0, 4, 0, 8, 0, 10,  0, 12],
+		[1, 0, 3, 0, 6, 0, 9,  0, 11,  0],	
+		[0, 2, 0, 3, 0, 8, 0, 10,  0, 12]
+		[1, 0, 3, 0, 6, 0, 9,  0, 11,  0],
+		[0, 1, 0, 3, 0, 6, 0, 10,  0, 12],
+	];
+	ai_eval_piece_weight = [50, 250, -50, -250];
+	player_count = [12, 12];
+	piece_count = [12, 0, 12, 0];
+	moves_count = 5;
+	max_avail_moves = 100;
+	longest_move = 1;
+	ai_bots = [4, 5, 6];
+
+	description =
+"Rules
+
+The general rule is that all moves and captures are made diagonally. All references to squares refer to the dark squares only. The main differences from English draughts are: the size of the board (10x10), pieces can also capture backward (not only forward), the long-range moving and capturing capability of kings, and the requirement that the maximum number of men be captured whenever a player has capturing options.
+Starting position
+
+    The game is played on a board with 10x10 squares, alternatingly dark and light. The lower-leftmost square should be dark.
+    Each player has 20 pieces. At the starting position (see picture) the pieces are placed on the first 4 rows closest to the players. This leaves two rows in the middle empty.
+
+Moves and captures
+
+    The player with the light pieces makes the first move. The two players make moves alternately.
+    Ordinary pieces move forward one square diagonally to a field that is not occupied by another piece.
+    Opposing pieces can and must be captured by jumping over the opposing piece, two squares. If one has the possibility to capture a piece then this must be done even if it is disadvantageous.
+        If there is one unoccupied square before or behind opposing pieces then jumps multiple times over opposing pieces in a single turn forward or backward can and must be made, making angles of 90 degrees. It is compulsory to jump over as many pieces as possible. One must play with the piece that can make the maximum captures.
+        After the piece has jumped over the opponents piece or pieces, the jumped over pieces are taken from the board. The men are not removed during the jump, only after the whole move.
+
+Crowning
+
+    A piece is crowned if it stops on the far edge of the board at the end of its turn (that is, not if it reaches the edge but must then jump another piece backward). Another piece is placed on top of it to mark it. Crowned pieces, sometimes called kings, can move freely multiple steps in any direction and may jump over and hence capture an opponent piece some distance away and choose where to stop afterwards, but must still capture the maximum number of pieces possible.
+
+Winning and draws
+
+    A player with no valid move remaining loses. This is the case if the player either has no pieces left or if a player's pieces are obstructed from making a legal move by the pieces of the opponent.
+
+    A game is a draw if neither opponent has the possibility to win the game.
+
+";
+
+}
+

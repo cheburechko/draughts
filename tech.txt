@@ -1,0 +1,41 @@
+Compilation:
+
+- make draughts -		The game!
+
+- make no_gui -			The same game but without proper GUI.
+
+Can be run like this:
+	./no_gui - makes random moves, type enter for the next move,
+	x to quit.
+
+	./no_gui rules.txt - the same but reads rules from a text file
+	If an error occurs, errors are printed and default rules are taken
+
+	./no_gui rules.txt white_depth black_depth ai_debug - uses a text file
+	and runs with bots with given depth. If depth is 0, the control of
+	the side is taken by user. Moves should be entered like this: "a1 b2"
+	If ai_debug is set to one, program will print every step of the
+	ai search and stop, if set to 2 it will print every step without
+	stopping (can't remember why I needed this ))
+
+
+Test files:
+
+
+- make test_parser -	./test_parser test.txt. Upon success you can
+						look through the the created data tree
+						Commands: root, print, child, find, exit
+
+- make test_rules -		./test_rules test.txt. Program doesn't
+						show anything if everythings ok.
+
+- make test_board - 	Same as above but without parmeters
+
+- make test_interface -	Tests some features of the interface.
+
+AI uses alpha-beta pruning for minimax search for fixed depth.
+If a move has a non-zero priority, the depth is increased.
+AI uses weights of pieces and board positions to evaluate
+the board state. The evaluation function is far from
+perfect, so an easy bot can beat the hard one. Bot difficulties
+are defined by the minimum depth of search.
